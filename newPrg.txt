@@ -1,0 +1,326 @@
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FileOperations
+{
+    class Program
+    {
+        private StreamReader br1;
+        static void Main(string[] args)
+        {
+            int op;
+            Console.WriteLine("Welcome to Student MAnagement System");
+            Console.WriteLine("1. Add Records.");
+            Console.WriteLine("2. Update A Record.");
+            Console.WriteLine("3. Delete A Record.");
+            Console.WriteLine("4. Search A Record.");
+            Console.WriteLine("5. Show All Records.");
+            Console.WriteLine("6. Exit");
+            Console.WriteLine("Enter your option:");
+            op = Convert.ToInt32(Console.ReadLine());
+
+            Program pr = new Program();
+            switch (op)
+            {
+                case 1:
+                    pr.AddRecords();
+                    break;
+                case 2:
+                    pr.UpdateRecords();
+                    break;
+                case 3:
+                    pr.DeleteRecords();
+                    break;
+                
+                case 4:
+                    pr.Search();
+                    break;
+                case 5:
+                    pr.ShowAll();
+                    break;
+                case 6:
+                    pr.Exit();
+                    break;
+                default: Console.WriteLine("Invalid Function selection");
+                    break;
+            }
+        }
+
+        public void AddRecords()
+        {
+            StreamWriter bw;
+            int id;
+            string name, address;
+
+            Console.WriteLine("Welcome to Student Management System");
+            Console.WriteLine("_______________________________________");
+            Console.WriteLine("Enter Roll No.:");
+            id = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter Name:");
+            name = Convert.ToString(Console.ReadLine());
+            Console.WriteLine("Enter Address:");
+            address = Convert.ToString(Console.ReadLine());
+
+            try
+            {
+                if (File.Exists("records.txt"))
+                    bw = new StreamWriter(new FileStream("records.txt", FileMode.Append));
+                else
+                    bw = new StreamWriter(new FileStream("records.txt", FileMode.OpenOrCreate));
+            }
+
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message + " cannot create file");
+                return;
+            }
+
+            try
+            {
+                bw.Write(id + ";");
+                bw.Write(name + ";");
+                bw.Write(address + "|");
+            }
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message + " Cannot write into the file");
+                return;
+            }
+            bw.Close();
+        }
+
+        public void UpdateRecords()
+        {
+            StreamReader br;
+
+            Console.WriteLine("Welcome to Student Management System");
+            Console.WriteLine("_______________________________________");
+            Console.Write("Enter Roll No. to Update Record: ");
+            int val = Convert.ToInt32(Console.ReadLine());
+            string[] details = new string[100];
+            string[] detailsNew = new string[100];
+
+            try
+            {
+                br = new StreamReader(new FileStream("records.txt", FileMode.Open));
+                string line = br.ReadLine();
+                Console.Write("\n");
+
+                char deli = '|';
+                String[] rec = line.Split(deli);
+                for (int val1 = 0; val1 < rec.Length; val1++)
+                {
+                    char deli2 = ';';
+
+                    if (rec[val1].Contains(Convert.ToString(val)))
+                    {
+                        String[] field = rec[val1].Split(deli2);
+                        for (int val2 = 1; val2 < field.Length; val2++)
+                        {
+                            details[val2] = field[val2];
+                        }
+                        Console.Write("\n");
+                    }
+                }
+                if (details != null)
+                {
+
+                    Console.WriteLine("_______________________________________");
+                    Console.Write("Name\t\tAddress\n");
+                    foreach (string data in details)
+                    {
+                        Console.Write(data + "\t\t\t");
+                    }
+                }
+                else
+                {
+                    Console.Write("No records found");
+                }
+
+                Console.WriteLine("Enter new record to update");
+                Console.WriteLine("_______________________________________");
+                Console.WriteLine("Enter Name : ");
+                Console.WriteLine("Enter Address: ");
+
+                Console.ReadKey();
+            }
+
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message + " cannot open file");
+                return;
+            }
+            br.Close();
+        }
+
+        public void DeleteRecords()
+        {
+            StreamReader br; 
+            StreamWriter bw;
+
+            Console.WriteLine("Welcome to Student Management System");
+            Console.WriteLine("_______________________________________");
+            Console.Write("Enter Roll No. to Delete Record: ");
+            int val = Convert.ToInt32(Console.ReadLine());
+            string[] details = new string[100];
+
+            try
+            {
+                br = new StreamReader(new FileStream("records.txt", FileMode.Open));
+                string line = br.ReadLine();
+                Console.Write("\n");
+
+                char deli = '|';
+                String[] rec = line.Split(deli);
+                for (int val1 = 0; val1 < rec.Length; val1++)
+                {
+                    char deli2 = ';';
+
+                    if (rec[val1].Contains(Convert.ToString(val)))
+                    {
+                        String[] field = rec[val1].Split(deli2);
+                        for (int val2 = 0; val2 < field.Length; val2++)
+                        {
+                            details[val2] = field[val2];
+                        }
+                        Console.Write("\n");
+                    }
+                    else
+                    {
+                        try
+                        {
+                            bw = new StreamWriter(new FileStream("newRecords.txt", FileMode.OpenOrCreate));
+                        }
+
+                        catch (IOException e)
+                        {
+                            Console.WriteLine(e.Message + " cannot create file");
+                            return;
+                        }
+                        try
+                        {
+                            bw.Write(rec[val1]+"|");
+                        }
+                        catch (IOException e)
+                        {
+                            Console.WriteLine(e.Message + " Cannot write into the file");
+                            return;
+                        }
+                        bw.Close();
+                    }
+                }
+                Console.ReadKey();
+            }
+
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message + " cannot open file");
+                return;
+            }
+            br.Close();
+        }
+
+        public void ShowAll()
+        {
+            StreamReader br;
+
+            Console.WriteLine("Welcome to Student Management System");
+            Console.WriteLine("_______________________________________");
+            Console.Write("Roll No.\t\t Name\t\tAddress");
+
+            try
+            {
+                br = new StreamReader(new FileStream("records.txt", FileMode.Open));
+                string line = br.ReadLine();
+                Console.Write("\n");
+                char deli = '|';
+                String[] rec = line.Split(deli);
+                for (int val1 = 0; val1 < rec.Length; val1++)
+                {
+                    char deli2 = ';';
+                    String[] field = rec[val1].Split(deli2);
+                    for (int val2 = 0; val2 < field.Length; val2++)
+                    {
+                        Console.Write(field[val2]);
+                        Console.Write("\t\t\t");
+                    }
+                    Console.Write("\n");
+                }
+                Console.ReadKey();
+            }
+
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message + " cannot open file");
+                return;
+            }
+            br.Close();
+        }
+
+        public void Exit()
+        {
+            System.Environment.Exit(1);
+        }
+
+        public void Search()
+        {
+            StreamReader br;
+
+            Console.WriteLine("Welcome to Student Management System");
+            Console.WriteLine("_______________________________________");
+            Console.Write("Enter Roll No. to Search Record: ");
+            int val = Convert.ToInt32(Console.ReadLine());
+            string[] details = new string[100];
+
+            try
+            {
+                br = new StreamReader(new FileStream("records.txt", FileMode.Open));
+                string line = br.ReadLine();
+                Console.Write("\n");
+
+                char deli = '|';
+                String[] rec = line.Split(deli);
+                for (int val1 = 0; val1 < rec.Length; val1++)
+                {
+                    char deli2 = ';';
+
+                    if (rec[val1].Contains(Convert.ToString(val)))
+                    {
+                        String[] field = rec[val1].Split(deli2);
+                        for (int val2 = 0; val2 < field.Length; val2++)
+                        {
+                            details[val2] = field[val2];
+                        }
+                        Console.Write("\n");
+                    }
+                }
+                if (details != null)
+                {
+
+                    Console.WriteLine("_______________________________________");
+                    Console.Write("Roll No.\t\t Name\t\tAddress\n");
+                    foreach (string data in details)
+                    {
+                        Console.Write(data+"\t\t\t");
+                    }
+                }
+                else
+                {
+                    Console.Write("No records found");
+                }
+                Console.ReadKey();
+            }
+
+            catch (IOException e)
+            {
+                Console.WriteLine(e.Message + " cannot open file");
+                return;
+            }
+            br.Close();
+        }
+    }
+}

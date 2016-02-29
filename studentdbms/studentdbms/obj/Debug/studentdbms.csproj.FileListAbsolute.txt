@@ -1,0 +1,6 @@
+C:\Users\Tasneem Parkar\Desktop\New folder\studentdbms\studentdbms\bin\Debug\studentdbms.exe.config
+C:\Users\Tasneem Parkar\Desktop\New folder\studentdbms\studentdbms\bin\Debug\studentdbms.exe
+C:\Users\Tasneem Parkar\Desktop\New folder\studentdbms\studentdbms\bin\Debug\studentdbms.pdb
+C:\Users\Tasneem Parkar\Desktop\New folder\studentdbms\studentdbms\obj\Debug\studentdbms.csprojResolveAssemblyReference.cache
+C:\Users\Tasneem Parkar\Desktop\New folder\studentdbms\studentdbms\obj\Debug\studentdbms.exe
+C:\Users\Tasneem Parkar\Desktop\New folder\studentdbms\studentdbms\obj\Debug\studentdbms.pdb
